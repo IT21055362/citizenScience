@@ -1,19 +1,27 @@
 const express = require('express')
+const Organization = require('../models/orgModel')
+
 const router = express.Router()
 
-//get all organizations
 router.get('/', (req, res) => {
   res.json({ mssg: 'GET all organizations' })
 })
 
-//GET a single organization
 router.get('/:id', (req, res) => {
   res.json({ mssg: 'GET a single organization' })
 })
 
+router.post('/', async (req, res) => {
+  const { orgName, eventType, location, date, name, contactNo } = req.body
 
-router.post('/', (req, res) => {
-  res.json({ mssg: 'POST a new organization' })
+  try {
+    const organization = await Organization.create({ orgName, eventType, location, date, name, contactNo })
+    res.status(200).json(organization)
+  } catch (error) {
+    res.status(400).json({ error: error.message })
+
+  }
+  // res.json({ mssg: 'POST a new organization' })
 })
 
 router.delete('/:id', (req, res) => {
