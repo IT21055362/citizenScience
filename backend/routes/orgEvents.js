@@ -2,7 +2,9 @@ const express = require('express')
 const {
   createOrgEvent,
   getOrgEvent,
-  getOrgEvents
+  getOrgEvents,
+  deleteOrgEvent,
+  updateOrgEvent
 } = require('../controllers/orgEventController')
 const Organization = require('../models/orgEventModel')
 
@@ -14,13 +16,9 @@ router.get('/:id', getOrgEvent)
 
 router.post('/', createOrgEvent)
 
-router.delete('/:id', (req, res) => {
-  res.json({ mssg: 'DELETE a organization' })
-})
+router.delete('/:id', deleteOrgEvent)
 
-router.patch('/:id', (req, res) => {
-  res.json({ mssg: 'UPDATE a new organization' })
-})
+router.patch('/:id', updateOrgEvent)
 
 
 module.exports = router

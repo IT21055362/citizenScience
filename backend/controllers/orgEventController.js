@@ -15,9 +15,9 @@ const getOrgEvent = async (req, res) => {
     return res.status(404).json({ error: 'No such event found!' })
   }
 
-  const orgEvent = await OrgEvent.findById(id)
+  const organization = await OrgEvent.findById(id)
 
-  if (!orgEvent) {
+  if (!organization) {
     return res.status(404).json({ error: 'No such event found!' })
   }
 
@@ -36,8 +36,46 @@ const createOrgEvent = async (req, res) => {
   }
 }
 
+const deleteOrgEvent = async (req, res) => {
+  const { id } = req.params
+
+  //check if id is valid 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'No such event found!' })
+  }
+
+  const organization = await OrgEvent.findOneAndDelete({ _id: id })
+
+  if (!organization) {
+    return res.status(404).json({ error: 'No such event found!' })
+  }
+
+  res.status(200).json(organization)
+}
+
+const updateOrgEvent = async (req, res) => {
+  const { id } = req.params
+
+  //check if id is valid 
+  if (!mongoose.Types.ObjectId.isValid(id)) {
+    return res.status(404).json({ error: 'No such event found!' })
+  }
+
+  const organization = await OrgEvent.findOneAndUpdate({ _id: id }, {
+    ...req.body
+  })
+
+  if (!organization) {
+    return res.status(404).json({ error: 'No such event found!' })
+  }
+
+  res.status(200).json(organization)
+}
+
 module.exports = {
   getOrgEvents,
   getOrgEvent,
-  createOrgEvent
+  createOrgEvent,
+  deleteOrgEvent,
+  updateOrgEvent
 }
