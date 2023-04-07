@@ -2,6 +2,10 @@ import {
   useEffect, useState
 } from "react";
 
+//components 
+import EventDetails from '../../components/EventDetails.js'
+import EventForm from '../../components/EventForm.js'
+
 const EventDisplay = () => {
   const [orgEvents, setOrgEvents] = useState(null)
 
@@ -20,13 +24,14 @@ const EventDisplay = () => {
 
 
   return (
-
-    <div className="events">
-      {orgEvents && orgEvents.map((orgEvent) => (
-        <p key={orgEvent._id}>{orgEvent.orgName}</p>
-      ))}
+    <div className="main">
+      <div className="events">
+        {orgEvents && orgEvents.map((orgEvent) => (
+          <EventDetails key={orgEvent._id} orgEvent={orgEvent} />
+        ))}
+      </div>
+      <EventForm />
     </div>
-
   )
 }
 export default EventDisplay;
