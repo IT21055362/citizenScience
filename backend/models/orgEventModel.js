@@ -3,7 +3,7 @@ const mongoosw = require('mongoose')
 
 const Schema = mongoose.Schema
 
-const orgSchema = new Schema({
+const orgEventSchema = new Schema({
   orgName: {
     type: String,
     required: true
@@ -30,4 +30,4 @@ const orgSchema = new Schema({
   }
 }, { timestamps: true })
 
-module.exports = mongoose.model('Organization', orgSchema)
+module.exports = mongoose.model('OrgEvent', orgEventSchema)
