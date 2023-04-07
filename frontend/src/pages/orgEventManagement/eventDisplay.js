@@ -7,6 +7,7 @@ import EventDetails from '../../components/EventDetails.js'
 import EventForm from '../../components/EventForm.js'
 
 const EventDisplay = () => {
+
   const [orgEvents, setOrgEvents] = useState(null)
 
   useEffect(() => {

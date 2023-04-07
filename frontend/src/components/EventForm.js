@@ -47,7 +47,12 @@ const EventForm = () => {
       <input type="text" onChange={(e) => setOrgName(e.target.value)} value={orgName} />
 
       <label>Choose Event Type: </label>
-      <input type="text" onChange={(e) => setEventType(e.target.value)} value={eventType} />
+      <select id="eventType" name="eventType" value={eventType} onChange={(e) => setEventType(e.target.value)}>
+        <option value="beachCleanUp" selected>Beach Clean Up</option>
+        <option value="fundRaiser">FundRaiser</option>
+        <option value="awarenessSession">Public Awareness Session</option>
+      </select>
+      {/* <input type="text" onChange={(e) => setEventType(e.target.value)} value={eventType} /> */}
 
       <label>Select the Location: </label>
       <input type="text" onChange={(e) => setLocation(e.target.value)} value={location} />
