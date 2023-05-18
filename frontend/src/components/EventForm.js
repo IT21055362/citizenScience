@@ -10,6 +10,15 @@ const EventForm = () => {
   const [contactNo, setContactNo] = useState('')
   const [error, setError] = useState(null)
 
+  const validateContactNo = () => {
+    const contactNoRegex = /^(0\d{9}|\d{9})$/; // Regex for 9 digits or 10 digits starting with 0
+    if (!contactNo.match(contactNoRegex)) {
+      setError("Contact Number must be a 9-digit number or a 10-digit number starting with 0.");
+    } else {
+      setError(null);
+    }
+  };
+
   const handleSubmit = async (e) => {
     e.preventDefault()
 
@@ -38,6 +47,14 @@ const EventForm = () => {
       setError(null)
       console.log('Event added', json)
     }
+
+    // Validate contactNo
+    // const contactNoRegex = /^(0\d{9}|\d{9})$/; // Regex for 9 digits or 10 digits starting with 0
+    // if (!contactNo.match(contactNoRegex)) {
+    //   setError("Contact Number must be a 9-digit number or a 10-digit number starting with 0.");
+    //   return;
+    // }
+
   }
 
   return (
@@ -65,18 +82,20 @@ const EventForm = () => {
                 <h6 className="card-title">Add a Community Service Event</h6>
 
 
-                {/* {error &&
+                {error &&
                   <div className="alert alert-danger alert-dismissible fade show" role="alert">
                     {error}
                     <button type="button" className="btn" data-bs-dismiss="alert" aria-label="Close"></button>
                   </div>
-                } */}
+                }
 
                 {/* <!-- Vertical Form --> */}
                 <form className="row g-3" onSubmit={handleSubmit}>
                   <div className="col-12">
                     <label  >Enter Organization Name: </label>
                     <input type="text" onChange={(e) => setOrgName(e.target.value)} value={orgName} />
+                    {/* Render error alert if orgName is empty */}
+                    {orgName === "" && <div className="alert alert-danger">Organization Name is required.</div>}
                   </div>
                   <div class="col-12">
                     <label >Choose Event Type: </label>
@@ -85,25 +104,39 @@ const EventForm = () => {
                       <option >Fund Raiser</option>
                       <option >Public Awareness Session</option>
                     </select>
+                    {/* Render error alert if eventType is empty */}
+                    {eventType === "" && <div className="alert alert-danger">Event Type is required.</div>}
                   </div>
 
                   <div className="col-12">
                     <label >Select the Location:</label>
                     <div class="col-sm-10">
                       <input type="text" onChange={(e) => setLocation(e.target.value)} value={location} />
+                      {/* Render error alert if location is empty */}
+                      {location === "" && <div className="alert alert-danger">Location is required.</div>}
                     </div>
                   </div>
+
                   <div className="col-12">
-                    <label for="inputEmail" className="form-label">Enter the date you planning to organize the event:</label>
+                    <label for="inputDate" className="form-label">Enter the date you planning to organize the event:</label>
                     <input type="date" onChange={(e) => setDate(e.target.value)} value={date} />
+                    {/* Render error alert if date is empty */}
+                    {date === "" && <div className="alert alert-danger">Date is required.</div>}
                   </div>
                   <div className="col-12">
                     <label for="inputPhone" className="form-label">Your Name:</label>
                     <input type="text" onChange={(e) => setName(e.target.value)} value={name} />
+                    {/* Render error alert if name is empty */}
+                    {name === "" && <div className="alert alert-danger">Name is required.</div>}
                   </div>
                   <div className="col-12">
                     <label for="inputAddress" className="form-label">Contact Number:</label>
                     <input type="text" onChange={(e) => setContactNo(e.target.value)} value={contactNo} />
+                    {/* Render error alert if Contact Number is empty */}
+                    {/* {contactNo === "" && <div className="alert alert-danger">Contact Number is required.</div>} */}
+
+                    {error && <div className="alert alert-danger">{error}</div>} {/* Display error if present */}
+
 
                   </div>
 
@@ -119,9 +152,9 @@ const EventForm = () => {
           <div className="col-lg-4">
           </div>
         </div>
-      </section>
+      </section >
 
-    </main>
+    </main >
   )
 }
 

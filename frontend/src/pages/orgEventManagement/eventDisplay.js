@@ -63,13 +63,15 @@ const EventDisplay = () => {
                 <table className="table">
                   <thead>
                     <tr>
-                      <th scope="col">ID</th>
+                      {/* <th scope="col">ID</th> */}
                       <th scope="col">Organization Name</th>
                       <th scope="col">Event Type</th>
                       <th scope="col">Location</th>
                       <th scope="col">Date</th>
                       <th scope="col">Organizer's Name</th>
                       <th scope="col">Contact Number</th>
+                      <th scope="col"></th>
+                      <th scope="col"></th>
                     </tr>
                   </thead>
                   <tbody>
@@ -79,13 +81,16 @@ const EventDisplay = () => {
                     {orgEvents && orgEvents.map((orgEvent) => (
                       // <EventDetails key={orgEvent._id} orgEvent={orgEvent} =>
                       <tr key={orgEvent._id}>
-                        <th scope="row">{orgEvent._id}</th>
+                        {/* <th scope="row">{orgEvent._id}</th> */}
                         <td>{orgEvent.orgName}</td>
                         <td>{orgEvent.eventType}</td>
                         <td>{orgEvent.location}</td>
                         <td>{orgEvent.date}</td>
                         <td>{orgEvent.name}</td>
                         <td>{orgEvent.contactNo}</td>
+                        <td><Link to={{ pathname: `/org/${orgEvent._id}` }}>View Profile</Link></td>
+                        <td><button>Delete</button></td>
+
 
                       </tr>
 
