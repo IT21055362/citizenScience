@@ -2,20 +2,26 @@ import {
   useEffect, useState
 } from "react";
 import { Link } from 'react-router-dom'
+import { useParams, useNavigate } from 'react-router-dom'
 
 //components 
 import EventDetails from '../../components/EventDetails.js'
-import EventForm from '../../components/EventForm.js'
+import EventForm from './EventForm.js'
 
 const EventDisplay = () => {
 
   const [orgEvents, setOrgEvents] = useState(null)
+  const [orgEvent, setOrgEvent] = useState(null);
   const [orgName, setOrgName] = useState('')
   const [eventType, setEventType] = useState('')
   const [location, setLocation] = useState('')
   const [date, setDate] = useState('')
   const [name, setName] = useState('')
   const [contactNo, setContactNo] = useState('')
+
+  const [error, setError] = useState(null)
+  const navigate = useNavigate()
+  const { id } = useParams()
 
   useEffect(() => {
     const fetchEvents = async () => {
@@ -29,6 +35,26 @@ const EventDisplay = () => {
 
     fetchEvents()
   }, [])
+
+  const handleDeleteSubmit = async (e, event) => {
+    e.preventDefault()
+
+    const response = await fetch(`http://localhost:4000/api/orgEvents/${event._id}`, {
+      method: 'DELETE'
+    })
+    const json = await response.json()
+
+    if (!response.ok) {
+      setError(json.error)
+      console.log(json.error)
+    }
+
+    if (response.ok) {
+      console.log('event deleted', json)
+      navigate("/")
+      window.location.reload();
+    }
+  }
 
   return (
     <main id="main" className="main">
@@ -88,8 +114,23 @@ const EventDisplay = () => {
                         <td>{orgEvent.date}</td>
                         <td>{orgEvent.name}</td>
                         <td>{orgEvent.contactNo}</td>
-                        <td><Link to={{ pathname: `/org/${orgEvent._id}` }}>View Profile</Link></td>
-                        <td><button>Delete</button></td>
+                        <td> {/*<Link to={{ pathname: `/org/${orgEvent._id}` }}>Update</Link> */}
+                          <Link to={{
+                            pathname: `/event/${orgEvent._id}`,
+                            state: {
+                              orgName: orgEvent.orgName,
+                              eventType: orgEvent.eventType,
+                              location: orgEvent.location,
+                              date: orgEvent.date,
+                              name: orgEvent.name,
+                              contactNo: orgEvent.contactNo
+                            }
+                          }}>Update</Link>
+                        </td>
+                        <td>
+                          {/* <button onClick={handleDeleteSubmit} >Delete</button> */}
+                          <button onClick={(e) => handleDeleteSubmit(e, orgEvent)}>Delete</button>
+                        </td>
 
 
                       </tr>
@@ -110,6 +151,8 @@ const EventDisplay = () => {
     </main>
 
   );
+
+
 
 }
 
