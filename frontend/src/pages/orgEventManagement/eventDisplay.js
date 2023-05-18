@@ -3,6 +3,8 @@ import {
 } from "react";
 import { Link } from 'react-router-dom'
 import { useParams, useNavigate } from 'react-router-dom'
+import { jsPDF } from 'jspdf'
+import html2canvas from "html2canvas"
 
 //components 
 import EventDetails from '../../components/EventDetails.js'
@@ -56,6 +58,34 @@ const EventDisplay = () => {
     }
   }
 
+  const printReport = (e) => {
+    e.preventDefault();
+    const input = document.getElementById("saveTable");
+
+    html2canvas(input, { scale: 2, logging: true, letterRendering: 1, useCORS: true })
+
+      .then(
+
+        canvas => {
+
+          const imgWidth = 210;
+
+          const imgHeight = canvas.height * imgWidth / canvas.width;
+
+          const imgData = canvas.toDataURL('img/svg');
+
+          const pdf = new jsPDF('p', 'mm', 'a4');
+
+          pdf.addImage(imgData, 'PNG', 0, 0, imgWidth, imgHeight);
+
+          pdf.save('report.pdf')
+
+        }
+
+      )
+
+  }
+
   return (
     <main id="main" className="main">
 
@@ -80,7 +110,7 @@ const EventDisplay = () => {
           <div className="col-lg-12">
 
             <div className="card">
-              {/* <center><button type="button" onClick={printReport} class="btn btn-primary btn-sm">Download as pdf</button></center> */}
+
               <div className="card-body" id="saveTable">
 
                 <h5 className="card-title">Community Service Events</h5>
@@ -146,6 +176,9 @@ const EventDisplay = () => {
       <div>
         <Link to="/event-form" className="btn btn-primary"> Organize an event
         </Link>
+      </div>
+      <div>
+        <center> <button type="button" onClick={printReport} class="btn btn-primary">Download as pdf</button></center>
       </div>
 
     </main>
