@@ -173,12 +173,9 @@ const EventDisplay = () => {
           </div>
         </div>
       </section>
-      <div>
-        <Link to="/event-form" className="btn btn-primary"> Organize an event
-        </Link>
-      </div>
-      <div>
-        <center> <button type="button" onClick={printReport} class="btn btn-primary">Download as pdf</button></center>
+      <div className="btn-container">
+        <Link to="/event-form" className="btn btn-primary"> Organize an event</Link>
+        <button type="button" onClick={printReport} class="btn btn-secondary">Download as pdf</button>
       </div>
 
     </main>

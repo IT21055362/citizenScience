@@ -5,6 +5,10 @@ import { useLocation } from 'react-router-dom';
 
 const EventUpdate = () => {
 
+  const locations = useLocation();
+  // Extract the state data from the location object
+  // const { orgName, eventType, location, date, name, contactNo } = locations.state;
+
   const [orgEvent, setOrgEvent] = useState(null);
   const [orgName, setOrgName] = useState('');
   const [eventType, setEventType] = useState('');
@@ -13,6 +17,7 @@ const EventUpdate = () => {
   const [name, setName] = useState('');
   const [contactNo, setContactNo] = useState('');
   const [error, setError] = useState(null)
+  const navigate = useNavigate();
 
 
   const handleUpdateSubmit = async (e) => {
@@ -45,6 +50,40 @@ const EventUpdate = () => {
       window.location.reload();
     }
   }
+
+  useEffect(() => {
+    const fetchEvent = async () => {
+
+      const response = await fetch("/event/:id")
+      const json = await response.json()
+      //console.log(json["name"])
+      if (response.ok) {
+        //console.log("json "+json["name"])
+        setOrgEvent(
+          {
+            orgName: `${json["orgName"]}`,
+            eventType: `${json["eventType"]}`,
+            location: `${json["location"]}`,
+            date: `${json["date"]}`,
+            name: `${json["name"]}`,
+            contactNo: `${json["contactNo"]}`,
+            _id: `${json["_id"]}`
+          })
+        setName(json["name"])
+        setDate(json["date"].slice(0, 10))
+        setOrgName(json["orgName"])
+        setEventType(json["eventType"])
+        setLocation(json["location"])
+        setContactNo(json["contactNo"])
+      } else {
+        console.log("not ok")
+      }
+
+    }
+
+    fetchEvent()
+
+  }, [setOrgEvent])
 
 
   return (
@@ -125,8 +164,9 @@ const EventUpdate = () => {
 
                   </div>
 
-                  <div className="text-center">
-                    <button type="submit" className="btn btn-primary">Update</button>
+                  <div className="text-center" >
+                    <button type="reset " className="btn btn-reset" onClick={() => navigate("/")}>  Cancel </button>
+                    <button type="submit" className="btn btn-submit" onClick={() => navigate("/")}>Update</button>
                   </div>
                 </form>
                 {/* <!-- Vertical Form --> */}

@@ -105,7 +105,7 @@ const EventForm = () => {
                       <option >Public Awareness Session</option>
                     </select>
                     {/* Render error alert if eventType is empty */}
-                    {eventType === "" && <div className="alert alert-danger">Event Type is required.</div>}
+                    {/* {eventType === "" && <div className="alert alert-danger">Event Type is required.</div>} */}
                   </div>
 
                   <div className="col-12">

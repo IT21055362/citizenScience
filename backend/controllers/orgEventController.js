@@ -1,12 +1,14 @@
 const OrgEvent = require('../models/orgEventModel')
 const mongoose = require('mongoose')
 
+//get all events
 const getOrgEvents = async (req, res) => {
   const orgEvent = await OrgEvent.find({}).sort({ createdAt: -1 })
 
   res.status(200).json(orgEvent)
 }
 
+//get a single event
 const getOrgEvent = async (req, res) => {
   const { id } = req.params
 
@@ -24,6 +26,7 @@ const getOrgEvent = async (req, res) => {
   res.status(200).json(orgEvent)
 }
 
+//add new event
 const createOrgEvent = async (req, res) => {
   const { orgName, eventType, location, date, name, contactNo } = req.body
 
@@ -36,6 +39,7 @@ const createOrgEvent = async (req, res) => {
   }
 }
 
+//delete a single event
 const deleteOrgEvent = async (req, res) => {
   const { id } = req.params
 
@@ -53,6 +57,7 @@ const deleteOrgEvent = async (req, res) => {
   res.status(200).json(orgEvent)
 }
 
+//update an event
 const updateOrgEvent = async (req, res) => {
   const { id } = req.params
 
