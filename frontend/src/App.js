@@ -5,16 +5,20 @@ import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom';
 import EventDisplay from './pages/orgEventManagement/eventDisplay';
 import EventForm from './pages/orgEventManagement/EventForm';
 import EventUpdate from './pages/orgEventManagement/eventUpdate';
+
+import Home from './pages/Home';
 function App() {
   return (
     <div className="App">
       <BrowserRouter>
         <div className='pages'>
           <Routes>
-            <Route path="/" element={<EventDisplay />}></Route>
+            <Route path='/' element={<Home />}> </Route>
+            <Route path="/allEvents" element={<EventDisplay />}></Route>
 
             <Route path="/event-form" element={<EventForm />}></Route>
             <Route path="/event/:id" element={<EventUpdate />}></Route>
+
 
           </Routes>
         </div>

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 
 const EventForm = () => {
   const [orgName, setOrgName] = useState('')
@@ -9,6 +9,7 @@ const EventForm = () => {
   const [name, setName] = useState('')
   const [contactNo, setContactNo] = useState('')
   const [error, setError] = useState(null)
+  const navigate = useNavigate();
 
   const validateContactNo = () => {
     const contactNoRegex = /^(0\d{9}|\d{9})$/; // Regex for 9 digits or 10 digits starting with 0
@@ -25,7 +26,7 @@ const EventForm = () => {
 
     const orgEvent = { orgName, eventType, location, date, name, contactNo }
 
-    const response = await fetch('/api/orgEvents', {
+    const response = await fetch(`http://localhost:4000/api/orgEvents`, {
       method: 'POST',
       body: JSON.stringify(orgEvent),
       headers: {
@@ -37,7 +38,7 @@ const EventForm = () => {
     if (!response.ok) {
       setError(json.error)
     }
-    if (response.ok) {
+    else {
       setOrgName('')
       setEventType('')
       setLocation('')
@@ -46,6 +47,7 @@ const EventForm = () => {
       setContactNo('')
       setError(null)
       console.log('Event added', json)
+      navigate("/allEvents")
     }
 
     // Validate contactNo
@@ -100,7 +102,7 @@ const EventForm = () => {
                   <div class="col-12">
                     <label >Choose Event Type: </label>
                     <select id="eventType" name="eventType" value={eventType} onChange={(e) => setEventType(e.target.value)}>
-                      <option selected>Beach Clean Up</option>
+                      <option >Beach Clean Up</option>
                       <option >Fund Raiser</option>
                       <option >Public Awareness Session</option>
                     </select>
@@ -130,7 +132,7 @@ const EventForm = () => {
                     {name === "" && <div className="alert alert-danger">Name is required.</div>}
                   </div>
                   <div className="col-12">
-                    <label for="inputAddress" className="form-label">Contact Number:</label>
+                    <label for="inputContactNo" className="form-label">Contact Number:</label>
                     <input type="text" onChange={(e) => setContactNo(e.target.value)} value={contactNo} />
                     {/* Render error alert if Contact Number is empty */}
                     {/* {contactNo === "" && <div className="alert alert-danger">Contact Number is required.</div>} */}
@@ -141,6 +143,7 @@ const EventForm = () => {
                   </div>
 
                   <div className="text-center">
+                    <button type="reset " className="btn btn-reset btn btn-secondary" onClick={() => navigate("/allEvents")}>  Cancel </button>
                     <button type="submit" className="btn btn-primary">Submit Event Details</button>
                   </div>
                 </form>

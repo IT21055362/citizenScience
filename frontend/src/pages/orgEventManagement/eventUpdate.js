@@ -6,24 +6,44 @@ import { useLocation } from 'react-router-dom';
 const EventUpdate = () => {
 
   const locations = useLocation();
+
+  let initialOrgName, initialEventType, initialLocation, initialDate, initialName, initialContactNo;
+
+  if (locations.state) {
+    ({ initialOrgName: initialOrgName, initialEventType: initialEventType, initialLocation: initialLocation, initialDate: initialDate, initialName: initialName, initialContactNo: initialContactNo } = locations.state);
+  }
   // Extract the state data from the location object
-  // const { orgName, eventType, location, date, name, contactNo } = locations.state;
+  // const { orgName: initialOrgName, eventType: initialEventType, location: initialLocation, date: initialDate, name: initialName, contactNo: initialContactNo } = locations.state;
+
+  // const locations = { state: { initialOrgName: 'a', x: 'b' } }
 
   const [orgEvent, setOrgEvent] = useState(null);
-  const [orgName, setOrgName] = useState('');
-  const [eventType, setEventType] = useState('');
-  const [location, setLocation] = useState('');
-  const [date, setDate] = useState('');
-  const [name, setName] = useState('');
-  const [contactNo, setContactNo] = useState('');
+  // const [orgName, setOrgName] = useState('');
+  // const [eventType, setEventType] = useState('');
+  // const [location, setLocation] = useState('');
+  // const [date, setDate] = useState('');
+  // const [name, setName] = useState('');
+  // const [contactNo, setContactNo] = useState('');
+
+  const [orgName, setOrgName] = useState(initialOrgName);
+  const [eventType, setEventType] = useState(initialEventType);
+  const [location, setLocation] = useState(initialLocation);
+  const [date, setDate] = useState(initialDate);
+  const [name, setName] = useState(initialName);
+  const [contactNo, setContactNo] = useState(initialContactNo);
+
   const [error, setError] = useState(null)
   const navigate = useNavigate();
 
 
+  //'http://localhost:4000/event/:id' + orgEvent.id,
+
   const handleUpdateSubmit = async (e) => {
     e.preventDefault()
 
-    const response = await fetch('http://localhost:4000/event/:id' + orgEvent.id, {
+    console.log(orgName, eventType, location, date, name, contactNo);
+
+    const response = await fetch(`http://localhost:4000/event/${location.state._id}`, {
       method: 'PATCH',
       body: JSON.stringify({
         orgName: orgName,
@@ -54,11 +74,9 @@ const EventUpdate = () => {
   useEffect(() => {
     const fetchEvent = async () => {
 
-      const response = await fetch("/event/:id")
+      const response = await fetch("/api/orgEvents/")
       const json = await response.json()
-      //console.log(json["name"])
       if (response.ok) {
-        //console.log("json "+json["name"])
         setOrgEvent(
           {
             orgName: `${json["orgName"]}`,
@@ -70,7 +88,7 @@ const EventUpdate = () => {
             _id: `${json["_id"]}`
           })
         setName(json["name"])
-        setDate(json["date"].slice(0, 10))
+        setDate(json["date"])
         setOrgName(json["orgName"])
         setEventType(json["eventType"])
         setLocation(json["location"])
@@ -165,8 +183,8 @@ const EventUpdate = () => {
                   </div>
 
                   <div className="text-center" >
-                    <button type="reset " className="btn btn-reset" onClick={() => navigate("/")}>  Cancel </button>
-                    <button type="submit" className="btn btn-submit" onClick={() => navigate("/")}>Update</button>
+                    <button type="reset " className="btn btn-reset btn btn-secondary" btn btn-secondary onClick={() => navigate("/allEvents")}>  Cancel </button>
+                    <button type="submit" className="btn btn-submit btn btn-primary" onClick={() => navigate("/allEvents")}>Update Event</button>
                   </div>
                 </form>
                 {/* <!-- Vertical Form --> */}

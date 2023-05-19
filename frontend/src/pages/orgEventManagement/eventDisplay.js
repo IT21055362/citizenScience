@@ -21,6 +21,7 @@ const EventDisplay = () => {
   const [name, setName] = useState('')
   const [contactNo, setContactNo] = useState('')
 
+
   const [error, setError] = useState(null)
   const navigate = useNavigate()
   const { id } = useParams()
@@ -41,6 +42,8 @@ const EventDisplay = () => {
   const handleDeleteSubmit = async (e, event) => {
     e.preventDefault()
 
+    console.log(orgName, eventType, location, date, name, contactNo);
+
     const response = await fetch(`http://localhost:4000/api/orgEvents/${event._id}`, {
       method: 'DELETE'
     })
@@ -53,7 +56,7 @@ const EventDisplay = () => {
 
     if (response.ok) {
       console.log('event deleted', json)
-      navigate("/")
+      navigate("/allEvents")
       window.location.reload();
     }
   }
@@ -145,7 +148,7 @@ const EventDisplay = () => {
                         <td>{orgEvent.name}</td>
                         <td>{orgEvent.contactNo}</td>
                         <td> {/*<Link to={{ pathname: `/org/${orgEvent._id}` }}>Update</Link> */}
-                          <Link to={{
+                          {/* <Link to={{
                             pathname: `/event/${orgEvent._id}`,
                             state: {
                               orgName: orgEvent.orgName,
@@ -155,7 +158,22 @@ const EventDisplay = () => {
                               name: orgEvent.name,
                               contactNo: orgEvent.contactNo
                             }
-                          }}>Update</Link>
+                          }}>Update</Link> */}
+                          <Link
+                            to={{
+                              pathname: `/event/${orgEvent._id}`,
+                              state: {
+                                orgName: orgEvent.orgName,
+                                eventType: orgEvent.eventType,
+                                location: orgEvent.location,
+                                date: orgEvent.date,
+                                name: orgEvent.name,
+                                contactNo: orgEvent.contactNo
+                              }
+                            }}
+                          >
+                            Update
+                          </Link>
                         </td>
                         <td>
                           {/* <button onClick={handleDeleteSubmit} >Delete</button> */}
@@ -171,12 +189,13 @@ const EventDisplay = () => {
               </div>
             </div>
           </div>
+          <div className="text-center">
+            <Link to="/event-form" className="btn btn-primary"> Organize an event</Link>
+            <button type="button" onClick={printReport} class="btn btn-success">Download as pdf</button>
+          </div>
         </div>
       </section>
-      <div className="btn-container">
-        <Link to="/event-form" className="btn btn-primary"> Organize an event</Link>
-        <button type="button" onClick={printReport} class="btn btn-secondary">Download as pdf</button>
-      </div>
+
 
     </main>
 
