@@ -11,17 +11,33 @@ const EventForm = () => {
   const [error, setError] = useState(null)
   const navigate = useNavigate();
 
+  // const validateContactNo = () => {
+  //   const contactNoRegex = /^(0\d{9}|\d{9})$/; // Regex for 9 digits or 10 digits starting with 0
+  //   if (!contactNo.match(contactNoRegex)) {
+  //     setError("Contact Number must be a 9-digit number or a 10-digit number starting with 0.");
+  //   } else {
+  //     setError(null);
+  //   }
+  // };
+
   const validateContactNo = () => {
     const contactNoRegex = /^(0\d{9}|\d{9})$/; // Regex for 9 digits or 10 digits starting with 0
     if (!contactNo.match(contactNoRegex)) {
       setError("Contact Number must be a 9-digit number or a 10-digit number starting with 0.");
+      return false;
     } else {
       setError(null);
+      return true;
     }
   };
 
   const handleSubmit = async (e) => {
     e.preventDefault()
+
+    const isContactNoValid = validateContactNo();
+    if (!isContactNoValid) {
+      return;
+    }
 
 
     const orgEvent = { orgName, eventType, location, date, name, contactNo }
@@ -50,12 +66,7 @@ const EventForm = () => {
       navigate("/allEvents")
     }
 
-    // Validate contactNo
-    // const contactNoRegex = /^(0\d{9}|\d{9})$/; // Regex for 9 digits or 10 digits starting with 0
-    // if (!contactNo.match(contactNoRegex)) {
-    //   setError("Contact Number must be a 9-digit number or a 10-digit number starting with 0.");
-    //   return;
-    // }
+
 
   }
 
@@ -135,7 +146,7 @@ const EventForm = () => {
                     <label for="inputContactNo" className="form-label">Contact Number:</label>
                     <input type="text" onChange={(e) => setContactNo(e.target.value)} value={contactNo} />
                     {/* Render error alert if Contact Number is empty */}
-                    {/* {contactNo === "" && <div className="alert alert-danger">Contact Number is required.</div>} */}
+                    {contactNo === "" && <div className="alert alert-danger">Contact Number is required.</div>}
 
                     {error && <div className="alert alert-danger">{error}</div>} {/* Display error if present */}
 
