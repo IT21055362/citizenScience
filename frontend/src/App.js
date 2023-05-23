@@ -24,33 +24,7 @@ import Home from './pages/Home';
 function App() {
   return (
     <div className="App">
-      <BrowserRouter>
-        <div className='pages'>
-          <Routes>
-            <Route path='/' element={<Home />}> </Route>
-            <Route path="/allEvents" element={<EventDisplay />}></Route>
 
-            <Route path="/event-form" element={<EventForm />}></Route>
-            <Route path="/event/:id" element={<EventUpdate />}></Route>
-
-            <Route path="/Report-dashboard" element={<ReportDashboard/>}/>
-                <Route path="/Reports" element={<Reports />} />
-                <Route path="/update-Report-details/:id" element={<ReportDetails />} />
-                <Route path="/add-Report" element={<AddReport />} />
-                <Route path="/Report-info/:id" element={<ReportInfo />} />
-                <Route path="/Report-details" element={<Error404 />} />
-                
-                <Route path="/Report-reports/:name/:rawMaterial" element={localStorage.getItem('employee')?<ReportPaymentReport/>:<Navigate to='/not-authorized'/>} />
-                <Route path="/Report-reports/:rawMaterial" element={localStorage.getItem('employee')?<ReportRawMaterialReport/>:<Navigate to='/not-authorized'/>} />
-                <Route path="/Report-payment-info/:name/:rawMaterial" element={localStorage.getItem('employee')?<PaymentInfo/>:<Navigate to='/not-authorized'/>} />
-                <Route path="/Report-reports" element={localStorage.getItem('employee')?<ReportReports/>:<Navigate to='/not-authorized'/>} />
-                <Route path="/Report-status-reports/:status" element={localStorage.getItem('employee')?<ReportStatus/>:<Navigate to='/not-authorized'/>} />
-
-
-          </Routes>
-        </div>
-      </BrowserRouter>
-    </div>
   );
 }
 
