@@ -1,0 +1,167 @@
+const { find } = require("../models/Report");
+const Report = require("../models/Report");
+
+//* create a suplliers
+const newReport = async (req, res) => {
+
+    const newReport = new Report({
+        userName: req.body.userName,
+        contactNo: req.body.contactNo,
+        typeOfLitter: req.body.typeOfLitter,
+        location: req.body.location,
+        desc: req.body.desc,
+        photo: req.body.photo,
+        status: req.body.status
+    });
+
+    newReport
+        .save()
+        .then(Report => res.status(200).json(Report))
+        .catch(error => res.status(400).json({ error: error.message }));
+};
+
+
+//* find all Reports
+const allReports = async (req, res) => {
+    await Report.find()
+        .then(Reports => res.status(200).json(Reports));
+};
+
+
+//* find a Report by id
+const ReportById = async (req, res) => {
+    Report
+        .findById(req.params.id)
+        .then((Report) => { res.status(200).json(Report) })
+        .catch(error => res.status(400).json({ error: error.message }));
+};
+
+
+//* find a Report by companyName
+const ReportByName = async (req, res) => {
+    Report
+        .find({ userName: { $regex: ".*" + req.params.uName + ".*", $options: 'i' } })
+        .then(Report => { res.status(200).json(Report) })
+        .catch(error => res.status(400).json({ error: error.message }))
+};
+
+//* find a Report by rawMaterial
+const ReportByRawMaterial = async (req, res) => {
+    Report
+        .find({ typeOfLitter: { $regex: ".*" + req.params.typeOfLitter + ".*", $options: 'i' } })
+        .then(Report => { res.status(200).json(Report) })
+        .catch(error => res.status(400).json({ error: error.message }))
+};
+
+
+
+//* update a Report
+const updateAReport = async (req, res) => {
+    updateReport = {
+        userName: req.body.userName,
+        contactNo: req.body.contactNo,
+        typeOfLitter: req.body.typeOfLitter,
+        location: req.body.location,
+        desc: req.body.desc,
+        photo: req.body.photo,
+        status: req.body.status
+    };
+
+
+    await Report
+        .findOneAndUpdate({ _id: req.params.id }, updateReport, { new: true })
+        .then(Report => res.status(200).json(Report))
+        .catch(error => res.status(400).json({ error: error.message }));
+};
+
+
+//*delete Report
+const deleteReport = async (req, res) => {
+    await Report
+        .findById(req.params.id)
+        .then(Report => Report.remove().then(res.json({ success: true }))) //! update this line
+        .catch(error => res.status(400).json({ error: error.message }));
+};
+
+//*get Report count
+const getReportCount = async (req, res) => {
+    await Report
+        .estimatedDocumentCount({})
+        .then(count => { res.json({ count: count }) })
+        .catch(error => { res.json({ error: error }) });
+};
+
+//* Get Bar Chart Data
+// const getReportData = async (req, res) => {
+//     await Report
+//         .find({status:true}, { companyName: 1, rawMaterial: 1, bankName: 1, bankBranch: 1, bankAccountNo: 1, _id: 1 })
+//         .then(ReportNames => res.json(ReportNames))
+//         .catch(error => res.json({ error: error.message }));
+// };
+
+//* Get Pie Chart Data
+const getStatusCount = async (req, res) => {
+    await Report
+        .aggregate()
+        .group({
+            _id: "$status",
+            count: {
+                $count: {}
+            }
+        })
+        .sort({
+            _id: 1
+        })
+        .then(data => res.json(data))
+        .catch(error => res.json({ error: error.message }));
+}
+const getCategoryCount = async (req, res) => {
+    await Report
+        .aggregate()
+        .group({
+            _id: "$typeOfLitter",
+            count: {
+                $count: {}
+            }
+        })
+        .sort({
+            _id: 1
+        })
+        .then(data => res.json(data))
+        .catch(error => res.json({ error: error.message }));
+}
+
+//*Get recently added Reports
+const getRecentlyAdded = async(req, res)=>{
+    await Report
+    .find({}, { userName: 1, typeOfLitter: 1, createdAt : 1, _id : 1})
+    .sort({createdAt : "asc"})
+    .limit(10)
+    .then(Reports=>res.status(200).json(Reports))
+    .catch(error=>res.status(400).json(error));
+}
+
+//*Get recently added Reports
+const getReportByStatus = async(req, res)=>{
+    await Report
+    .find({status:req.params.status})
+    .then(Reports=>res.status(200).json(Reports))
+    .catch(error=>res.status(400).json(error));
+}
+
+
+
+module.exports = {
+    newReport,
+    allReports,
+    ReportById,
+    ReportByName,
+    ReportByRawMaterial,
+    updateAReport,
+    getReportCount,
+    deleteReport,
+    getCategoryCount,
+    getStatusCount,
+    getRecentlyAdded,
+    getReportByStatus
+};
